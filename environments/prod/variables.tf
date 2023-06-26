@@ -81,6 +81,8 @@ variable "vpc_config" {
     #   vpc_peering_connection_id  = string
     # }))
     public_rtb_nm = string
+    private_rtb_nm = string
+    nacl_nm = string
   }))
   description = "map of object of vpc configs"
 }

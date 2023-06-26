@@ -100,13 +100,93 @@ resource "aws_nat_gateway" "ngw" {
 resource "aws_route_table" "public" {
   for_each = var.vpc_config
   vpc_id   = aws_vpc.vpc[each.key].id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw[each.key].id
+  }
   tags = {
     Name = each.value.public_rtb_nm
   }
 }
 
-resource "aws_route" "route" {
-  for_each = var.vpc_config
+resource "aws_route_table_association" "public0" {
+  for_each       = var.vpc_config
+  subnet_id      = aws_subnet.public0[each.key].id
   route_table_id = aws_route_table.public[each.key].id
-  destination_cidr_block = try(each.value.)
+}
+
+resource "aws_route_table_association" "public1" {
+  for_each       = var.vpc_config
+  subnet_id      = aws_subnet.public1[each.key].id
+  route_table_id = aws_route_table.public[each.key].id
+}
+
+resource "aws_route_table_association" "public2" {
+  for_each       = var.vpc_config
+  subnet_id      = aws_subnet.public2[each.key].id
+  route_table_id = aws_route_table.public[each.key].id
+}
+
+resource "aws_route_table" "private" {
+  for_each = var.vpc_config
+  vpc_id   = aws_vpc.vpc[each.key].id
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.ngw[each.key].id
+  }
+  tags = {
+    Name = each.value.private_rtb_nm
+  }
+}
+
+resource "aws_route_table_association" "private0" {
+  for_each       = var.vpc_config
+  subnet_id      = aws_subnet.private0[each.key].id
+  route_table_id = aws_route_table.private[each.key].id
+}
+
+resource "aws_route_table_association" "private1" {
+  for_each       = var.vpc_config
+  subnet_id      = aws_subnet.private1[each.key].id
+  route_table_id = aws_route_table.private[each.key].id
+}
+
+resource "aws_route_table_association" "private2" {
+  for_each       = var.vpc_config
+  subnet_id      = aws_subnet.private2[each.key].id
+  route_table_id = aws_route_table.private[each.key].id
+}
+
+resource "aws_network_acl" "nacl" {
+  for_each = var.vpc_config
+  vpc_id   = aws_vpc.vpc[each.key].id
+  subnet_ids = [
+    aws_subnet.public0[each.key].id,
+    aws_subnet.public1[each.key].id,
+    aws_subnet.public2[each.key].id,
+    aws_subnet.private0[each.key].id,
+    aws_subnet.private1[each.key].id,
+    aws_subnet.private2[each.key].id
+  ]
+  ingress {
+    from_port  = 0
+    to_port    = 0
+    rule_no    = 100
+    action     = "allow"
+    protocol   = "all"
+    cidr_block = "0.0.0.0/0"
+  }
+  egress {
+    protocol   = "all"
+    from_port  = 0
+    to_port    = 0
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+  }
+
+  tags = {
+    Name = each.value.nacl_nm
+  }
+
 }

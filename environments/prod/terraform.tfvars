@@ -27,11 +27,13 @@ vpc_config = {
     public_cidr_blocks    = ["10.180.10.0/24", "10.180.30.0/24", "10.180.50.0/24"]
     public_sn_nms         = ["saturn-tw-prod-workload-public-sn-a", "saturn-tw-prod-workload-public-sn-c", "saturn-tw-prod-workload-public-sn-d"]
     private_cidr_blocks   = ["10.180.20.0/24", "10.180.40.0/24", "10.180.60.0/24"]
-    private_sn_nms        = ["saturn-tw-prod-workload-private-sn-a", "saturn-tw-prod-workload-private-sn-b", "saturn-tw-prod-workload-private-sn-c"]
+    private_sn_nms        = ["saturn-tw-prod-workload-private-sn-a", "saturn-tw-prod-workload-private-sn-c", "saturn-tw-prod-workload-private-sn-d"]
     igw_nm                = "saturn-tw-prod-workload-igw"
     ngw_private_ip        = null
     ngw_connectivity_type = "public"
     ngw_nm                = "saturn-tw-prod-workload-ngw"
     public_rtb_nm         = "saturn-tw-prod-workload-public-rtb"
+    private_rtb_nm        = "saturn-tw-prod-workload-private-rtb"
+    nacl_nm               = "saturn-tw-prod-workload-nacl"
   }
 }

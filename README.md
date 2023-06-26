@@ -16,27 +16,38 @@ ex) dataplatform-kr-prod-workload-vpc
 
 &emsp;
 
-subnet: [vpc_name without resource name]-[public or private]-[resource]-[az]
+subnet: [vpc_name without resource suffix]-[public or private]-[resource]-[az]
 
 ex) toyproject-jp-beta-k8s-public-sn-c <br />
 ex) dataplatform-kr-prod-workload-private-sn-a
 
 &emsp;
 
-igw: [vpc_name without resource name]-igw
+igw: [vpc_name without resource suffix]-igw
 
 ex) dataplatform-kr-prod-workload-igw
 
 &emsp;
 
-eip: [vpc_name without resource name]-[#usage]-[resource]
+eip: [vpc_name without resource suffix]-[#usage]-[resource]
 
 ex) dataplatform-kr-prod-workload-nat-eip
 
 &emsp;
 
-nat: [vpc_name without resource name]-[resource]
+nat: [vpc_name without resource suffix]-[resource]
 
 ex) dataplatform-kr-prod-workload-ngw
 
 &emsp;
+
+nacl: [vpc_name without resource suffix]-nacl
+
+ex) dataplatform-kr-prod-workload-nacl
+
+&emsp;
+
+rtb: [vpc_name without resource suffix]-[public or private]-rtb
+
+ex) dataplatform-kr-prod-workload-public-rtb
+ex) dataplatform-kr-prod-workload-private-rtb
