@@ -5,13 +5,13 @@ terraform {
       version = "~> 4.65.0"
     }
   }
-  backend "s3" {
-    bucket         = "riman-terraform-state"
-    key            = "taiwan/prod/terraform.state"
-    region         = "ap-northeast-1"
-    dynamodb_table = "riman-terraform-state-locking"
-    encrypt        = true
-  }
+  # backend "s3" {
+  #   bucket         = "riman-terraform-state"
+  #   key            = "taiwan/prod/terraform.state"
+  #   region         = "ap-northeast-1"
+  #   dynamodb_table = "riman-terraform-state-locking"
+  #   encrypt        = true
+  # }
 }
 
 provider "aws" {

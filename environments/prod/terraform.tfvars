@@ -19,13 +19,19 @@ s3_config = {
 
 vpc_config = {
   "saturn-tw-prod-workload-vpc" = {
-    cidr_block           = "10.180.0.0/16"
-    instance_tenancy     = "default"
-    enable_dns_support   = true
-    enable_dns_hostnames = true
-    azs                  = ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"]
-    public_cidr_blocks   = ["10.180.10.0/24", "10.180.20.0/24", "10.180.30.0/24"]
-    public_sn_nms        = ["saturn-tw-prod-workload-public-sn-a", "saturn-tw-prod-workload-public-sn-c", "saturn-tw-prod-workload-public-sn-d"]
-
+    cidr_block            = "10.180.0.0/16"
+    instance_tenancy      = "default"
+    enable_dns_support    = true
+    enable_dns_hostnames  = true
+    azs                   = ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"]
+    public_cidr_blocks    = ["10.180.10.0/24", "10.180.30.0/24", "10.180.50.0/24"]
+    public_sn_nms         = ["saturn-tw-prod-workload-public-sn-a", "saturn-tw-prod-workload-public-sn-c", "saturn-tw-prod-workload-public-sn-d"]
+    private_cidr_blocks   = ["10.180.20.0/24", "10.180.40.0/24", "10.180.60.0/24"]
+    private_sn_nms        = ["saturn-tw-prod-workload-private-sn-a", "saturn-tw-prod-workload-private-sn-b", "saturn-tw-prod-workload-private-sn-c"]
+    igw_nm                = "saturn-tw-prod-workload-igw"
+    ngw_private_ip        = null
+    ngw_connectivity_type = "public"
+    ngw_nm                = "saturn-tw-prod-workload-ngw"
+    public_rtb_nm         = "saturn-tw-prod-workload-public-rtb"
   }
 }

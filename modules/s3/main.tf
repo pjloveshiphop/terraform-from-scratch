@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "bucket" {
   bucket   = each.key
   lifecycle {
     # prevent_destroy = each.value.prevent_destroy
-    prevent_destroy = true
+    prevent_destroy = false
   }
   tags = {
     Name = each.key
