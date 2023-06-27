@@ -17,9 +17,7 @@ module "vpc" {
   public_sn_cidr_blocks  = var.public_sn_cidr_blocks
   private_sn_nms         = var.private_sn_nms
   private_sn_cidr_blocks = var.private_sn_cidr_blocks
-
-
-
+  cgw_config             = var.cgw_config
 }
 
 # module "security" {

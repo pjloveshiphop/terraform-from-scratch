@@ -90,3 +90,10 @@ variable "private_sn_nms" {
 }
 
 
+variable "cgw_config" {
+  type        = list(object({
+    name = string
+    ip_address = string
+  }))
+  description = "list of customer gateway device config objects"
+}

@@ -32,4 +32,10 @@ variable "private_sn_nms" {
   description = "list of private subnet names"
 }
 
-
+variable "cgw_config" {
+  type        = list(object({
+    name = string
+    ip_address = string
+  }))
+  description = "list of customer gateway device config objects"
+}

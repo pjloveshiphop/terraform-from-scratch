@@ -3,7 +3,7 @@ aws_region               = "ap-northeast-1"
 shared_config_file       = "~/.aws/config"
 shared_credentials_files = "~/.aws/credentials"
 aws_config_profile       = "taiwan-prod"
-terraform_repo_name      = "terraform-practice"
+terraform_repo_name      = "terraform-from-scratch"
 env                      = "prod"
 maintainer               = "devops"
 # dynamodb_table_nm        = "riman-terraform-state-locking"
@@ -42,10 +42,15 @@ private_sn_cidr_blocks = [
 ]
 
 private_sn_nms = [
-  "dataplatform-kr-private-public-sn-a",
-  "dataplatform-kr-private-public-sn-c",
-  "dataplatform-kr-private-public-sn-d"
+  "dataplatform-kr-prod-private-sn-a",
+  "dataplatform-kr-prod-private-sn-c",
+  "dataplatform-kr-prod-private-sn-d"
 ]
 
-
+cgw_config = [
+  {
+    name       = "seoul-office-cgw"
+    ip_address = "121.134.221.250"
+  }
+]
 
