@@ -1,6 +1,17 @@
 # terraform-from-scratch
 this repo is to enhance and get familiar with Terraform
 
+*** all resources that are created by ``terrafrom apply`` are the followings:
+
+1 vpc <br />
+6 subnets (3 public, 3 private) <br />
+1 internet gateway <br />
+1 nat gateway (with 1 elastic ip and elastic network interface for elastic ip) <br />
+1 customer gateway <br />
+1 virtual private gateway <br />
+2 route tables (1 public, 1 private) <br />
+1 network acl 
+
 ---
 ## Naming Conventions
 [common rules]
