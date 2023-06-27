@@ -1,192 +1,85 @@
 resource "aws_vpc" "vpc" {
-  for_each             = var.vpc_config
-  cidr_block           = each.value.cidr_block
-  instance_tenancy     = each.value.instance_tenancy
-  enable_dns_support   = each.value.enable_dns_support
-  enable_dns_hostnames = each.value.enable_dns_hostnames
+  cidr_block           = var.vpc_cidr_block
+  enable_dns_hostnames = true
   tags = {
-    Name = each.key
+    Name = var.vpc_nm
   }
 }
 
-resource "aws_subnet" "public0" {
-  for_each          = var.vpc_config
-  vpc_id            = aws_vpc.vpc[each.key].id
-  cidr_block        = each.value.public_cidr_blocks[0]
-  availability_zone = each.value.azs[0]
+resource "aws_subnet" "public" {
+  count                   = length(var.azs)
+  availability_zone       = var.azs[count.index]
+  cidr_block              = var.public_sn_cidr_blocks[count.index]
+  map_public_ip_on_launch = true
+  vpc_id                  = aws_vpc.vpc.id
   tags = {
-    Name = each.value.public_sn_nms[0]
-  }
-
-}
-
-resource "aws_subnet" "public1" {
-  for_each          = var.vpc_config
-  vpc_id            = aws_vpc.vpc[each.key].id
-  cidr_block        = each.value.public_cidr_blocks[1]
-  availability_zone = each.value.azs[1]
-  tags = {
-    Name = each.value.public_sn_nms[1]
-  }
-
-}
-
-resource "aws_subnet" "public2" {
-  for_each          = var.vpc_config
-  vpc_id            = aws_vpc.vpc[each.key].id
-  cidr_block        = each.value.public_cidr_blocks[2]
-  availability_zone = each.value.azs[2]
-  tags = {
-    Name = each.value.public_sn_nms[2]
+    Name = var.public_sn_nms[count.index]
   }
 }
 
-resource "aws_subnet" "private0" {
-  for_each          = var.vpc_config
-  vpc_id            = aws_vpc.vpc[each.key].id
-  cidr_block        = each.value.private_cidr_blocks[0]
-  availability_zone = each.value.azs[0]
+resource "aws_subnet" "private" {
+  count             = length(var.azs)
+  availability_zone = var.azs[count.index]
+  cidr_block        = var.private_sn_cidr_blocks[count.index]
+  vpc_id            = aws_vpc.vpc.id
   tags = {
-    Name = each.value.private_sn_nms[0]
-  }
-}
-
-resource "aws_subnet" "private1" {
-  for_each          = var.vpc_config
-  vpc_id            = aws_vpc.vpc[each.key].id
-  cidr_block        = each.value.private_cidr_blocks[1]
-  availability_zone = each.value.azs[1]
-  tags = {
-    Name = each.value.private_sn_nms[1]
-  }
-}
-
-resource "aws_subnet" "private2" {
-  for_each          = var.vpc_config
-  vpc_id            = aws_vpc.vpc[each.key].id
-  cidr_block        = each.value.private_cidr_blocks[2]
-  availability_zone = each.value.azs[2]
-  tags = {
-    Name = each.value.private_sn_nms[2]
+    Name = var.private_sn_nms[count.index]
   }
 }
 
 resource "aws_internet_gateway" "igw" {
-  for_each = var.vpc_config
-  vpc_id   = aws_vpc.vpc[each.key].id
+  vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = each.value.igw_nm
+    Name = join("-", [substr(aws_vpc.vpc.tags.Name, 0, length(aws_vpc.vpc.tags.Name) - 4), "igw"])
   }
 }
 
-resource "aws_eip" "eip" {
-  for_each = var.vpc_config
+# resource "aws_network_interface" "ngw_eni" {
+#   subnet_id   = aws_subnet.public[0].id
+#   description = "this eni is for eip of ngw"
+#   tags = {
+#     Name = join("-", [substr(aws_vpc.vpc.tags.Name, 0, length(aws_vpc.vpc.tags.Name) - 4), "ngw-eni"])
+#   }
+# }
+
+resource "aws_eip" "ngw_eip" {
+  vpc = true
   tags = {
-    Name = join("-", [each.value.ngw_nm, "eip"])
+    Name = join("-", [substr(aws_vpc.vpc.tags.Name, 0, length(aws_vpc.vpc.tags.Name) - 4), "ngw-eip"])
   }
 }
 
 resource "aws_nat_gateway" "ngw" {
-  for_each          = var.vpc_config
-  allocation_id     = aws_eip.eip[each.key].id
-  connectivity_type = each.value.ngw_connectivity_type
-  private_ip        = try(each.value.ngw_private_ip, null)
-  subnet_id         = aws_subnet.public0[each.key].id
+  allocation_id     = aws_eip.ngw_eip.id
+  connectivity_type = "public"
+  subnet_id         = aws_subnet.public[0].id
   tags = {
-    Name = each.value.ngw_nm
+    Name = join("-", [substr(aws_vpc.vpc.tags.Name, 0, length(aws_vpc.vpc.tags.Name) - 4), "ngw"])
   }
-}
-
-resource "aws_route_table" "public" {
-  for_each = var.vpc_config
-  vpc_id   = aws_vpc.vpc[each.key].id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw[each.key].id
-  }
-  tags = {
-    Name = each.value.public_rtb_nm
-  }
-}
-
-resource "aws_route_table_association" "public0" {
-  for_each       = var.vpc_config
-  subnet_id      = aws_subnet.public0[each.key].id
-  route_table_id = aws_route_table.public[each.key].id
-}
-
-resource "aws_route_table_association" "public1" {
-  for_each       = var.vpc_config
-  subnet_id      = aws_subnet.public1[each.key].id
-  route_table_id = aws_route_table.public[each.key].id
-}
-
-resource "aws_route_table_association" "public2" {
-  for_each       = var.vpc_config
-  subnet_id      = aws_subnet.public2[each.key].id
-  route_table_id = aws_route_table.public[each.key].id
-}
-
-resource "aws_route_table" "private" {
-  for_each = var.vpc_config
-  vpc_id   = aws_vpc.vpc[each.key].id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.ngw[each.key].id
-  }
-  tags = {
-    Name = each.value.private_rtb_nm
-  }
-}
-
-resource "aws_route_table_association" "private0" {
-  for_each       = var.vpc_config
-  subnet_id      = aws_subnet.private0[each.key].id
-  route_table_id = aws_route_table.private[each.key].id
-}
-
-resource "aws_route_table_association" "private1" {
-  for_each       = var.vpc_config
-  subnet_id      = aws_subnet.private1[each.key].id
-  route_table_id = aws_route_table.private[each.key].id
-}
-
-resource "aws_route_table_association" "private2" {
-  for_each       = var.vpc_config
-  subnet_id      = aws_subnet.private2[each.key].id
-  route_table_id = aws_route_table.private[each.key].id
+  depends_on = [aws_internet_gateway.igw]
 }
 
 resource "aws_network_acl" "nacl" {
-  for_each = var.vpc_config
-  vpc_id   = aws_vpc.vpc[each.key].id
-  subnet_ids = [
-    aws_subnet.public0[each.key].id,
-    aws_subnet.public1[each.key].id,
-    aws_subnet.public2[each.key].id,
-    aws_subnet.private0[each.key].id,
-    aws_subnet.private1[each.key].id,
-    aws_subnet.private2[each.key].id
-  ]
+  vpc_id     = aws_vpc.vpc.id
+  subnet_ids = concat(aws_subnet.public[*].id, aws_subnet.private[*].id)
   ingress {
     from_port  = 0
     to_port    = 0
     rule_no    = 100
     action     = "allow"
-    protocol   = "all"
     cidr_block = "0.0.0.0/0"
+    protocol   = "all"
   }
   egress {
-    protocol   = "all"
     from_port  = 0
     to_port    = 0
     rule_no    = 100
     action     = "allow"
     cidr_block = "0.0.0.0/0"
+    protocol   = "all"
   }
-
   tags = {
-    Name = each.value.nacl_nm
+    Name = join("-", [substr(aws_vpc.vpc.tags.Name, 0, length(aws_vpc.vpc.tags.Name) - 4), "nacl"])
   }
-
 }
+

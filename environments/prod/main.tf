@@ -9,6 +9,22 @@
 # }
 
 module "vpc" {
-  source     = "../../modules/vpc"
-  vpc_config = var.vpc_config
+  source                 = "../../modules/vpc"
+  vpc_cidr_block         = var.vpc_cidr_block
+  vpc_nm                 = var.vpc_nm
+  azs                    = var.azs
+  public_sn_nms          = var.public_sn_nms
+  public_sn_cidr_blocks  = var.public_sn_cidr_blocks
+  private_sn_nms         = var.private_sn_nms
+  private_sn_cidr_blocks = var.private_sn_cidr_blocks
+
+
+
 }
+
+# module "security" {
+#   source    = "../../modules/security"
+#   sg_config = var.sg_config
+#   vpc_id    = module.vpc.vpc_id
+
+# }
