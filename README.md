@@ -1,7 +1,12 @@
 # terraform-from-scratch
-this repo is to enhance and get familiar with Terraform
+this repo is to enhance and get familiar with Terraform <br />
+this is individual project so s3 remote backend is not being used <br />
+
+&emsp;
 
 *** all resources that are created by ``terrafrom apply`` are the followings:
+
+&emsp;
 
 1 vpc <br />
 6 subnets (3 public, 3 private) <br />
