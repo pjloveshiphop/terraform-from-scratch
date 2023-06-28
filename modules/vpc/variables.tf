@@ -33,9 +33,31 @@ variable "private_sn_nms" {
 }
 
 variable "cgw_config" {
-  type        = list(object({
-    name = string
+  type = list(object({
+    name       = string
     ip_address = string
   }))
   description = "list of customer gateway device config objects"
+}
+
+variable "sg_config" {
+  type = map(object({
+    name        = string
+    description = string
+  }))
+}
+
+variable "sg_rule" {
+  type = map(object({
+    sg_nm                    = string
+    type                     = string
+    from_port                = number
+    to_port                  = number
+    protocol                 = string
+    cidr_blocks              = list(string)
+    prefix_list_ids          = list(string)
+    self                     = bool
+    source_security_group_id = string
+    description              = string
+  }))
 }

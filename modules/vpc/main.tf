@@ -152,3 +152,34 @@ resource "aws_vpn_gateway" "vgw" {
     Name = join("-", [substr(aws_vpc.vpc.tags.Name, 0, length(aws_vpc.vpc.tags.Name) - 4), "vgw"])
   }
 }
+
+resource "aws_security_group" "sg" {
+  for_each    = var.sg_config
+  name        = each.key
+  description = each.value.description
+  vpc_id      = aws_vpc.vpc.id
+  egress {
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "all"
+    description = "Allow all outbound traffic"
+  }
+  tags = {
+    Name = each.key
+  }
+}
+
+resource "aws_security_group_rule" "sg_rule" {
+  for_each                 = var.sg_rule
+  security_group_id        = aws_security_group.sg[each.value.sg_nm].id
+  type                     = each.value.type
+  from_port                = each.value.from_port
+  to_port                  = each.value.to_port
+  protocol                 = each.value.protocol
+  cidr_blocks              = length(each.value.cidr_blocks) != 0 ? each.value.cidr_blocks : null
+  prefix_list_ids          = length(each.value.prefix_list_ids) != 0 ? each.value.prefix_list_ids : null
+  self                     = each.value.cidr_blocks != null || each.value.source_security_group_id != null ? each.value.self : null
+  source_security_group_id = each.value.source_security_group_id != "" ? each.value.source_security_group_id : null
+  description              = each.value.description
+}

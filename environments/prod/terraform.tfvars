@@ -54,3 +54,48 @@ cgw_config = [
   }
 ]
 
+sg_config = {
+  "test-sg" = {
+    name        = "test-sg"
+    description = "this is a test sg and will be deleted shortly"
+  }
+  "test-sg2" = {
+    name        = "test-sg2"
+    description = "this is a test sg2 and will be deleted shortly"
+  }
+}
+
+sg_rule = {
+  "test-sg1" = {
+    sg_nm                    = "test-sg"
+    type                     = "ingress"
+    from_port                = 22
+    to_port                  = 22
+    protocol                 = "tcp"
+    cidr_blocks              = ["121.134.221.250/32"]
+    prefix_list_ids          = []
+    self                     = null
+    source_security_group_id = ""
+    description              = "Allow SSH from specified ip"
+  }
+  "test-sg2" = {
+    sg_nm                    = "test-sg"
+    type                     = "ingress"
+    from_port                = 80
+    to_port                  = 80
+    protocol                 = "tcp"
+    cidr_blocks              = ["0.0.0.0/0"]
+    prefix_list_ids          = []
+    self                     = null
+    source_security_group_id = ""
+    description              = "Allow all inbound traffic on specified port"
+  }
+}
+
+key_config = [
+  {
+    key_nm          = "test"
+    public_key_path = "/Users/r00273/Desktop/terraform-from-scratch-keys/test.pub"
+  }
+]
+

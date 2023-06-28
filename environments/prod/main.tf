@@ -18,11 +18,11 @@ module "vpc" {
   private_sn_nms         = var.private_sn_nms
   private_sn_cidr_blocks = var.private_sn_cidr_blocks
   cgw_config             = var.cgw_config
+  sg_config              = var.sg_config
+  sg_rule                = var.sg_rule
 }
 
-# module "security" {
-#   source    = "../../modules/security"
-#   sg_config = var.sg_config
-#   vpc_id    = module.vpc.vpc_id
-
-# }
+module "ec2" {
+  source = "../../modules/ec2"
+  key_config = var.key_config
+}
