@@ -23,6 +23,11 @@ module "vpc" {
 }
 
 module "ec2" {
-  source = "../../modules/ec2"
+  source     = "../../modules/ec2"
   key_config = var.key_config
+  ec2_config = var.ec2_config
+  ebs_config = var.ebs_config
+  sg_id      = ["${module.vpc.test_sg_id}"]
+  sn_id      = module.vpc.public_sn0_id
+  
 }
