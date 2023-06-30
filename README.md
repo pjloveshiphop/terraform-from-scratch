@@ -32,7 +32,7 @@ ex) dataplatform-kr-prod-workload-vpc
 
 &emsp;
 
-subnet: [vpc_name without resource suffix]-[public or private]-[resource]-[az]
+subnet: [vpc_name without resource suffix]-[#usage]-[public or private]-[resource]-[az]
 
 ex) toyproject-jp-beta-k8s-public-sn-c <br />
 ex) dataplatform-kr-prod-workload-private-sn-a

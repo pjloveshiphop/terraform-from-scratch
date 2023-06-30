@@ -29,5 +29,15 @@ module "ec2" {
   ebs_config = var.ebs_config
   sg_id      = ["${module.vpc.test_sg_id}"]
   sn_id      = module.vpc.public_sn0_id
-  
+
+}
+
+module "rds" {
+  source                 = "../../modules/rds"
+  db_sg_config           = var.db_sg_config
+  private_sn_ids         = [module.vpc.private_sn0_id, module.vpc.private_sn1_id, module.vpc.private_sn2_id]
+  db_pg_config           = var.db_pg_config
+  vpc_security_group_ids = [module.vpc.dataplatform_kr_prod_rds_sg_id]
+  db_instance_config     = var.db_instance_config
+
 }

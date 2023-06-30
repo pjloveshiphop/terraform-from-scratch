@@ -18,7 +18,7 @@ variable "sg_id" {
 
 variable "ec2_config" {
   type = list(object({
-    name                        = string
+    instance_name               = string
     ami                         = string
     associate_public_ip_address = bool
     az                          = string
@@ -31,7 +31,7 @@ variable "ec2_config" {
       iops                  = number
       volume_size           = number
       volume_type           = string
-      name                  = string
+      root_name             = string
     })
   }))
 }

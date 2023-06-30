@@ -22,13 +22,13 @@ resource "aws_instance" "ec2" {
     volume_size           = var.ec2_config[count.index].root_block_device.volume_size
     volume_type           = var.ec2_config[count.index].root_block_device.volume_type
     tags = {
-      Name = var.ec2_config[count.index].root_block_device.name
+      Name = var.ec2_config[count.index].root_block_device.root_name
     }
   }
   vpc_security_group_ids = var.sg_id
   subnet_id              = var.sn_id
   tags = {
-    Name = var.ec2_config[count.index].name
+    Name = var.ec2_config[count.index].instance_name
   }
 }
 
