@@ -51,6 +51,14 @@ resource "aws_eip" "ngw_eip" {
   }
 }
 
+resource "aws_eip" "eip" {
+  count = length(var.eip_nms) > 0 ? length(var.eip_nms) : 0
+  vpc   = true
+  tags = {
+    Name = var.eip_nms[count.index]
+  }
+
+}
 resource "aws_nat_gateway" "ngw" {
   allocation_id     = aws_eip.ngw_eip.id
   connectivity_type = "public"

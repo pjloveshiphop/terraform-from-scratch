@@ -32,6 +32,11 @@ variable "private_sn_nms" {
   description = "list of private subnet names"
 }
 
+variable "eip_nms" {
+  type = list(string)
+  description = "list of eip names"
+}
+
 variable "cgw_config" {
   type = list(object({
     name       = string

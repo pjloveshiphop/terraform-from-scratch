@@ -17,6 +17,7 @@ module "vpc" {
   public_sn_cidr_blocks  = var.public_sn_cidr_blocks
   private_sn_nms         = var.private_sn_nms
   private_sn_cidr_blocks = var.private_sn_cidr_blocks
+  eip_nms                = var.eip_nms
   cgw_config             = var.cgw_config
   sg_config              = var.sg_config
   sg_rule                = var.sg_rule
@@ -40,4 +41,12 @@ module "rds" {
   vpc_security_group_ids = [module.vpc.dataplatform_kr_prod_rds_sg_id]
   db_instance_config     = var.db_instance_config
 
+}
+
+module "iam" {
+  source                     = "../../modules/iam"
+  iam_policy_config = var.iam_policy_config
+  iam_group_config           = var.iam_group_config
+  iam_user_config            = var.iam_user_config
+  iam_user_create_access_key = var.iam_user_create_access_key
 }
