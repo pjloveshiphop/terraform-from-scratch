@@ -23,30 +23,33 @@ module "vpc" {
   sg_rule                = var.sg_rule
 }
 
-module "ec2" {
-  source     = "../../modules/ec2"
-  key_config = var.key_config
-  ec2_config = var.ec2_config
-  ebs_config = var.ebs_config
-  sg_id      = ["${module.vpc.test_sg_id}"]
-  sn_id      = module.vpc.public_sn0_id
+# module "ec2" {
+#   source     = "../../modules/ec2"
+#   key_config = var.key_config
+#   ec2_config = var.ec2_config
+#   ebs_config = var.ebs_config
+#   sg_id      = ["${module.vpc.test_sg_id}"]
+#   sn_id      = module.vpc.public_sn0_id
 
-}
+# }
 
-module "rds" {
-  source                 = "../../modules/rds"
-  db_sg_config           = var.db_sg_config
-  private_sn_ids         = [module.vpc.private_sn0_id, module.vpc.private_sn1_id, module.vpc.private_sn2_id]
-  db_pg_config           = var.db_pg_config
-  vpc_security_group_ids = [module.vpc.dataplatform_kr_prod_rds_sg_id]
-  db_instance_config     = var.db_instance_config
+# module "rds" {
+#   source                 = "../../modules/rds"
+#   db_sg_config           = var.db_sg_config
+#   private_sn_ids         = [module.vpc.private_sn0_id, module.vpc.private_sn1_id, module.vpc.private_sn2_id]
+#   db_pg_config           = var.db_pg_config
+#   vpc_security_group_ids = [module.vpc.dataplatform_kr_prod_rds_sg_id]
+#   db_instance_config     = var.db_instance_config
 
-}
+# }
 
 module "iam" {
-  source                     = "../../modules/iam"
-  iam_policy_config = var.iam_policy_config
-  iam_group_config           = var.iam_group_config
-  iam_user_config            = var.iam_user_config
-  iam_user_create_access_key = var.iam_user_create_access_key
+  source                       = "../../modules/iam"
+  iam_policy_config            = var.iam_policy_config
+  iam_group_config             = var.iam_group_config
+  iam_group_member_config      = var.iam_group_member_config
+  iam_user_config              = var.iam_user_config
+  iam_user_create_access_key   = var.iam_user_create_access_key
+  iam_policy_attachment_config = var.iam_policy_attachment_config
+  iam_role_config              = var.iam_role_config
 }

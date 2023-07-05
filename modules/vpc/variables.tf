@@ -33,7 +33,7 @@ variable "private_sn_nms" {
 }
 
 variable "eip_nms" {
-  type = list(string)
+  type        = list(string)
   description = "list of eip names"
 }
 
