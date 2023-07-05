@@ -15,7 +15,12 @@ this is individual project so s3 remote backend is not being used <br />
 1 customer gateway <br />
 1 virtual private gateway <br />
 2 route tables (1 public, 1 private) <br />
-1 network acl 
+1 network acl <br />
+3 security groups <br />
+1 ec2 instance <br />
+1 iam role <br />
+1 iam user <br />
+1 rds instance (mariaDB) <br />
 
 ---
 ## Naming Conventions
