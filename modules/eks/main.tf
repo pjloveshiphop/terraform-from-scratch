@@ -49,13 +49,13 @@ resource "aws_eks_node_group" "node_group" {
   }
 }
 
-# resource "aws_eks_identity_provider_config" "oidc" {
-#   cluster_name = 
-#   oidc {
-#     client_id =
-#     issuer_url = 
-#   }
-# }
+resource "aws_iam_openid_connect_provider" "oidc" {
+  count           = length(var.eks_config) > 0 ? length(var.eks_config) : 0
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
+  url             = aws_eks_cluster.cluster[count.index].identity[0].oidc[0].issuer
+  depends_on      = [aws_eks_cluster.cluster]
+}
 
 resource "aws_eks_addon" "cluster_addon" {
   count         = length(var.eks_addon_config) > 0 ? length(var.eks_addon_config) : 0
@@ -64,7 +64,8 @@ resource "aws_eks_addon" "cluster_addon" {
   addon_version = var.eks_addon_config[count.index].addon_version
   # resolve_conflicts_on_create = var.eks_addon_config[count.index].resolve_conflicts_on_create
   # resolve_conflicts_on_update = var.eks_addon_config[count.index].resolve_conflicts_on_update
-  resolve_conflicts = var.eks_addon_config[count.index].resolve_conflicts
-  preserve          = var.eks_addon_config[count.index].preserve
-  #service_account_role_arn = var.eks_cluster_role
+  resolve_conflicts        = var.eks_addon_config[count.index].resolve_conflicts
+  preserve                 = var.eks_addon_config[count.index].preserve
+  service_account_role_arn = var.eks_cluster_role
+  depends_on               = [aws_eks_cluster.cluster]
 }
