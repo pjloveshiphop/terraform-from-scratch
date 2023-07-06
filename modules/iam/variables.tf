@@ -53,5 +53,4 @@ variable "iam_role_config" {
     role_policy_nm          = string
     role_policy_file        = string
   }))
-
 }

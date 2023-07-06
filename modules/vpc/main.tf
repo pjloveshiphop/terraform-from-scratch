@@ -15,6 +15,7 @@ resource "aws_subnet" "public" {
   tags = {
     Name       = var.public_sn_nms[count.index]
     Identifier = "public"
+    #"kubernetes.io/cluster/test-eks-cluster" : "owned"
   }
 }
 
@@ -26,6 +27,7 @@ resource "aws_subnet" "private" {
   tags = {
     Name       = var.private_sn_nms[count.index]
     Identifier = "private"
+    #"kubernetes.io/cluster/test-eks-cluster" : "owned"
   }
 }
 

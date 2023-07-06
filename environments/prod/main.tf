@@ -23,15 +23,15 @@ module "vpc" {
   sg_rule                = var.sg_rule
 }
 
-# module "ec2" {
-#   source     = "../../modules/ec2"
-#   key_config = var.key_config
-#   ec2_config = var.ec2_config
-#   ebs_config = var.ebs_config
-#   sg_id      = ["${module.vpc.test_sg_id}"]
-#   sn_id      = module.vpc.public_sn0_id
+module "ec2" {
+  source     = "../../modules/ec2"
+  key_config = var.key_config
+  ec2_config = var.ec2_config
+  ebs_config = var.ebs_config
+  sg_id      = ["${module.vpc.test_sg_id}"]
+  sn_id      = module.vpc.public_sn0_id
 
-# }
+}
 
 # module "rds" {
 #   source                 = "../../modules/rds"
@@ -52,4 +52,16 @@ module "iam" {
   iam_user_create_access_key   = var.iam_user_create_access_key
   iam_policy_attachment_config = var.iam_policy_attachment_config
   iam_role_config              = var.iam_role_config
+}
+
+module "eks" {
+  source                         = "../../modules/eks"
+  eks_config                     = var.eks_config
+  eks_cluster_role               = module.iam.eks_cluster_role
+  eks_cluster_subnet_ids         = [module.vpc.public_sn0_id, module.vpc.public_sn1_id, module.vpc.private_sn0_id, module.vpc.private_sn1_id]
+  eks_cluster_security_group_ids = []
+  eks_ng_role                    = module.iam.eks_ng_role
+  eks_ng_subnet_ids              = [module.vpc.private_sn0_id, module.vpc.private_sn1_id]
+  eks_ng_security_group_ids      = []
+  eks_addon_config               = var.eks_addon_config
 }

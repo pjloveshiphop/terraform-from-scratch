@@ -19,17 +19,21 @@ resource "aws_iam_role" "role" {
   managed_policy_arns = length(var.iam_role_config[count.index].managed_policy_arns) == 0 ? null : var.iam_role_config[count.index].managed_policy_arns
   name                = var.iam_role_config[count.index].role_nm
   path                = "/"
+  inline_policy {
+    name   = var.iam_role_config[count.index].role_policy_nm == "" ? null : var.iam_role_config[count.index].role_policy_nm
+    policy = var.iam_role_config[count.index].role_policy_file == "" ? null : file(var.iam_role_config[count.index].role_policy_file)
+  }
   tags = {
     Name = var.iam_role_config[count.index].role_nm
   }
 }
 
-resource "aws_iam_role_policy" "role_policy" {
-  count  = length(var.iam_role_config) > 0 ? length(var.iam_role_config) : 0
-  name   = var.iam_role_config[count.index].role_policy_nm
-  policy = file(var.iam_role_config[count.index].role_policy_file)
-  role   = aws_iam_role.role[count.index].id
-}
+# resource "aws_iam_role_policy" "role_policy" {
+#   count  = length(var.iam_role_config) > 0 ? length(var.iam_role_config) : 0
+#   name   = var.iam_role_config[count.index].role_policy_nm == ""? null : var.iam_role_config[count.index].role_policy_nm
+#   policy = var.iam_role_config[count.index].role_policy_file == "" ? null : file(var.iam_role_config[count.index].role_policy_file)
+#   role   = var.iam_role_config[count.index].role_policy_nm == "" ? null : aws_iam_role.role[count.index].id
+# }
 
 # resource "aws_iam_role_policy_attachment" "role_attachment" {
 #   count      = length(var.iam_role_config) > 0 ? length(var.iam_role_config) : 0
