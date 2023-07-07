@@ -1,3 +1,18 @@
+variable "public_sn0_id" {
+  type        = string
+  description = "id of public subnet 0"
+}
+
+variable "public_sn1_id" {
+  type        = string
+  description = "id of public subnet 1"
+}
+
+variable "public_sn2_id" {
+  type        = string
+  description = "id of public subnet 2"
+}
+
 variable "key_config" {
   type = list(object({
     key_nm          = string
@@ -51,3 +66,15 @@ variable "ebs_config" {
   }))
 }
 
+variable "lb_config" {
+  type = list(object({
+    access_log_enabled  = bool
+    bucket_nm           = string
+    deletion_protection = bool
+    internal            = bool
+    ip_address_type     = string
+    lb_type             = string
+    lb_nm               = string
+    sg_ids              = list(string)
+  }))
+}

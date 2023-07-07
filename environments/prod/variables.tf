@@ -40,15 +40,15 @@ variable "maintainer" {
   description = "maintainer of terrafrom resources"
 }
 
-# variable "s3_config" {
-#   type = map(object({
-#     prevent_destroy   = bool
-#     versioning_status = string
-#     sse_algorithm     = string
-#   }))
+variable "s3_config" {
+  type = map(object({
+    prevent_destroy   = bool
+    versioning_status = string
+    sse_algorithm     = string
+  }))
 
-#   description = "map of s3 config object"
-# }
+  description = "map of s3 config object"
+}
 
 # variable "dynamodb_table_nm" {
 #   type        = string
@@ -304,5 +304,18 @@ variable "eks_addon_config" {
     # resolve_conflicts_on_create = string
     # resolve_conflicts_on_update = string
     preserve = bool
+  }))
+}
+
+variable "lb_config" {
+  type = list(object({
+    access_log_enabled  = bool
+    bucket_nm           = string
+    deletion_protection = bool
+    internal            = bool
+    ip_address_type     = string
+    lb_type             = string
+    lb_nm               = string
+    sg_ids              = list(string)
   }))
 }

@@ -1,7 +1,7 @@
-# module "s3" {
-#   source    = "../../modules/s3"
-#   s3_config = var.s3_config
-# }
+module "s3" {
+  source    = "../../modules/s3"
+  s3_config = var.s3_config
+}
 
 # module "dynamodb" {
 #   source            = "../../modules/dynamodb"
@@ -24,13 +24,16 @@ module "vpc" {
 }
 
 module "ec2" {
-  source     = "../../modules/ec2"
-  key_config = var.key_config
-  ec2_config = var.ec2_config
-  ebs_config = var.ebs_config
-  sg_id      = ["${module.vpc.test_sg_id}"]
-  sn_id      = module.vpc.public_sn0_id
-
+  source        = "../../modules/ec2"
+  key_config    = var.key_config
+  ec2_config    = var.ec2_config
+  ebs_config    = var.ebs_config
+  sg_id         = ["${module.vpc.test_sg_id}"]
+  sn_id         = module.vpc.public_sn0_id
+  lb_config     = var.lb_config
+  public_sn0_id = module.vpc.public_sn0_id
+  public_sn1_id = module.vpc.public_sn1_id
+  public_sn2_id = module.vpc.public_sn2_id
 }
 
 # module "rds" {
