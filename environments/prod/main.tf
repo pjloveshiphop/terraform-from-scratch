@@ -17,6 +17,8 @@ module "vpc" {
   public_sn_cidr_blocks  = var.public_sn_cidr_blocks
   private_sn_nms         = var.private_sn_nms
   private_sn_cidr_blocks = var.private_sn_cidr_blocks
+  db_sn_cidr_blocks      = var.db_sn_cidr_blocks
+  db_sn_nms              = var.db_sn_nms
   eip_nms                = var.eip_nms
   cgw_config             = var.cgw_config
   sg_config              = var.sg_config
@@ -68,3 +70,8 @@ module "eks" {
   eks_ng_security_group_ids      = []
   eks_addon_config               = var.eks_addon_config
 }
+
+# module "route53" {
+#   source         = "../../modules/route53"
+#   route53_config = var.route53_config
+# }

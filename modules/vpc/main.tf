@@ -7,9 +7,9 @@ resource "aws_vpc" "vpc" {
 }
 
 resource "aws_subnet" "public" {
-  count                   = length(var.azs)
+  count                   = length(var.azs) > 0 ? length(var.azs) : 0
   availability_zone       = var.azs[count.index]
-  cidr_block              = var.public_sn_cidr_blocks[count.index]
+  cidr_block              = cidrsubnet(var.vpc_cidr_block, 8, index(var.azs, var.azs[count.index]) + 1)
   map_public_ip_on_launch = true
   vpc_id                  = aws_vpc.vpc.id
   tags = {
@@ -20,14 +20,25 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "private" {
-  count             = length(var.azs)
+  count             = length(var.azs) > 0 ? length(var.azs) : 0
   availability_zone = var.azs[count.index]
-  cidr_block        = var.private_sn_cidr_blocks[count.index]
+  cidr_block        = cidrsubnet(var.vpc_cidr_block, 8, index(var.azs, var.azs[count.index]) + 4)
   vpc_id            = aws_vpc.vpc.id
   tags = {
     Name       = var.private_sn_nms[count.index]
     Identifier = "private"
     #"kubernetes.io/cluster/test-eks-cluster" : "owned"
+  }
+}
+
+resource "aws_subnet" "db_private" {
+  count             = length(var.azs) > 0 ? length(var.azs) : 0
+  availability_zone = var.azs[count.index]
+  cidr_block        = var.db_sn_cidr_blocks[count.index]
+  vpc_id            = aws_vpc.vpc.id
+  tags = {
+    Name       = var.db_sn_nms[count.index]
+    Identifier = "private"
   }
 }
 

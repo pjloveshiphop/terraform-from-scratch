@@ -32,6 +32,18 @@ variable "private_sn_nms" {
   description = "list of private subnet names"
 }
 
+variable "db_sn_cidr_blocks" {
+  type        = list(string)
+  description = "list of private subnet cidr blocks for db"
+}
+
+variable "db_sn_nms" {
+  type        = list(string)
+  description = "list of private subnet names for db"
+}
+
+
+
 variable "eip_nms" {
   type        = list(string)
   description = "list of eip names"
